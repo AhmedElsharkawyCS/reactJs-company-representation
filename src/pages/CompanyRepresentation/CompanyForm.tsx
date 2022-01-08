@@ -1,27 +1,28 @@
-import React, { useEffect, Fragment } from "react"
+import React, { useState, Fragment } from "react"
 import Box from "@mui/material/Box"
 import FormControl from "@mui/material/FormControl"
 import Grid from "@mui/material/Grid"
 import Divider from "@mui/material/Divider"
 import AddIcon from "@mui/icons-material/AddBoxOutlined"
 import { useForm, useFieldArray, Controller } from "react-hook-form"
-import { TextField, DateField, Button, Text } from "../../components"
-// import { getLocationAddresses } from "../../api"
+import { TextField, DateField, Button, Text, Autocomplete } from "../../components"
+import { getLocationAddresses } from "../../api"
 
 interface IProps {
   onSubmit?: (data: any) => void
 }
 const initialValues = {
   fullName: "",
-  city: "",
   birthDate: new Date(),
   street: "",
   province: "",
   postalCode: "",
   apartment: "",
+  city: "",
 }
 
 export default function CompanyMultiForm(props: IProps) {
+  const [addressOptions, setAddressOptions] = useState([])
   const { control, handleSubmit } = useForm({
     defaultValues: {
       directors: [initialValues],
@@ -38,35 +39,77 @@ export default function CompanyMultiForm(props: IProps) {
     if (fields.length < 4) {
       //   const address = await getLocationAddress()
       //   console.log(address)
-      append({ ...initialValues, apartment: "apartment", postalCode: "postalCode", province: "province", city: "city", street: "street" })
+      append({ ...initialValues })
+      setAddressOptions([])
     }
   }
-  const fillAddress = (index: number) => {
-    const object = fields.find((_, idx) => idx === index)
-    if (!object) return null
-    object.apartment = "apartment"
-    object.postalCode = "postalCode"
-    object.province = "province"
-    object.city = "city"
-    object.street = "street"
+  const autoCompleteAddress = (idx: number, option: any) => {
+    if (!option) return null
     const items = fields
-    items[index] = object
+    const { id } = option
+    const addressItem: any = addressOptions.find((item: any) => item.id === id)
+    if (!addressItem) return null
+    const { properties } = addressItem
+    items[idx] = { ...items[idx], ...properties }
     replace([...items])
   }
-
-  useEffect(() => {
-    fillAddress(0)
-    // eslint-disable-next-line
-  }, [])
-
+  const onSearch = async (txt: string) => {
+    const data = await getLocationAddresses(txt || "")
+    if (!data) return null
+    const { features } = data
+    const addresses = features.map(({ properties }: any) => {
+      return {
+        id: properties.place_id,
+        value: properties.formatted,
+        properties: {
+          street: properties?.formatted || "",
+          province: properties?.state || "",
+          postalCode: properties?.postcode || "",
+          apartment: properties?.address_line1 || "",
+          city: properties?.city || "",
+        },
+      }
+    })
+    setAddressOptions(addresses)
+  }
   return (
-    <Box component='form' autoComplete='off' onSubmit={handleSubmit(onSubmit)} sx={{ width: "600px", pt: "20px" }}>
+    <Box
+      component='form'
+      autoComplete='off'
+      onSubmit={handleSubmit(onSubmit)}
+      sx={{
+        maxWidth: "700px",
+        pt: "20px",
+        "@media (max-width:750px)": {
+          maxWidth: "90%",
+        },
+      }}
+    >
       <FormControl>
-        <Grid container spacing={3}>
+        <Grid
+          container
+          spacing={3}
+          sx={{
+            "@media (max-width:500px)": {
+              ml: "unset",
+              mr: "unset",
+              width: "auto",
+            },
+          }}
+        >
           {fields.map((item, index) => {
             return (
               <Fragment key={item.id}>
-                <Grid item xs={12} key={item.id}>
+                <Grid
+                  item
+                  xs={12}
+                  key={item.id}
+                  sx={{
+                    "@media (max-width:500px)": {
+                      pl: "0px !important",
+                    },
+                  }}
+                >
                   <Grid container spacing={2}>
                     <Grid item xs={12}>
                       <Grid container spacing={2}>
@@ -96,18 +139,19 @@ export default function CompanyMultiForm(props: IProps) {
                           <Text>Beneficial owner - home address (no P.O boxes)</Text>
                         </Grid>
                         <Grid item xs={12}>
-                          <Controller
-                            render={({ field: { ref, ...field } }) => (
-                              <TextField {...field} inputRef={ref} size='small' type='text' label='Beneficial owner full name' />
-                            )}
-                            name={`directors.${index}.street` as never}
-                            control={control}
+                          <Autocomplete
+                            label='Address'
+                            options={addressOptions}
+                            onChange={(e, option) => {
+                              autoCompleteAddress(index, option)
+                            }}
+                            onSearch={onSearch}
                           />
                         </Grid>
                         <Grid item xs={6}>
                           <Controller
                             render={({ field: { ref, ...field } }) => (
-                              <TextField {...field} inputRef={ref} size='small' type='text' label='Beneficial owner full name' />
+                              <TextField {...field} inputRef={ref} size='small' type='text' label='Department/Suite' />
                             )}
                             name={`directors.${index}.apartment` as never}
                             control={control}
@@ -115,9 +159,7 @@ export default function CompanyMultiForm(props: IProps) {
                         </Grid>
                         <Grid item xs={6}>
                           <Controller
-                            render={({ field: { ref, ...field } }) => (
-                              <TextField {...field} inputRef={ref} size='small' type='text' label='Beneficial owner full name' />
-                            )}
+                            render={({ field: { ref, ...field } }) => <TextField {...field} inputRef={ref} size='small' type='text' label='City' />}
                             name={`directors.${index}.city` as never}
                             control={control}
                           />
@@ -125,7 +167,7 @@ export default function CompanyMultiForm(props: IProps) {
                         <Grid item xs={6}>
                           <Controller
                             render={({ field: { ref, ...field } }) => (
-                              <TextField {...field} inputRef={ref} size='small' type='text' label='Beneficial owner full name' />
+                              <TextField {...field} inputRef={ref} size='small' type='text' label='Province' />
                             )}
                             name={`directors.${index}.province` as never}
                             control={control}
@@ -134,7 +176,7 @@ export default function CompanyMultiForm(props: IProps) {
                         <Grid item xs={6}>
                           <Controller
                             render={({ field: { ref, ...field } }) => (
-                              <TextField {...field} inputRef={ref} size='small' type='text' label='Beneficial owner full name' />
+                              <TextField {...field} inputRef={ref} size='small' type='text' label='Postal Code' />
                             )}
                             name={`directors.${index}.postalCode` as never}
                             control={control}
@@ -153,7 +195,16 @@ export default function CompanyMultiForm(props: IProps) {
               </Fragment>
             )
           })}
-          <Grid item xs={12} key={200}>
+          <Grid
+            item
+            xs={12}
+            key={200}
+            sx={{
+              "@media (max-width:500px)": {
+                pl: "0px !important",
+              },
+            }}
+          >
             <Grid container spacing={2}>
               <Grid item xs={12} display='flex' justifyContent='center'>
                 <AddIcon onClick={handleAddMore} fontSize='small' sx={{ marginInlineEnd: "10px", cursor: "pointer" }} />

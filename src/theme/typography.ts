@@ -1,5 +1,7 @@
 import { TypographyOptions } from "@mui/material/styles/createTypography"
+import { pxToRem } from "../utils"
 
+// const breakpoints = createBreakpoints({});
 export const typography: TypographyOptions | undefined = {
   fontFamily: "'Roboto', sans-serif",
   fontSize: 14,
@@ -8,30 +10,84 @@ export const typography: TypographyOptions | undefined = {
   fontWeightMedium: 700,
   h1: {
     letterSpacing: 0,
-    fontSize: 60,
+    fontSize: pxToRem(60),
+    "@media (max-width:600px)": {
+      fontSize: pxToRem(50),
+    },
+    "@media (max-width:400px)": {
+      fontSize: pxToRem(40),
+    },
   },
   h2: {
-    fontSize: 48,
+    fontSize: pxToRem(48),
+    "@media (max-width:600px)": {
+      fontSize: pxToRem(40),
+    },
+    "@media (max-width:400px)": {
+      fontSize: pxToRem(35),
+    },
   },
   h3: {
-    fontSize: 42,
+    fontSize: pxToRem(42),
+    "@media (max-width:600px)": {
+      fontSize: pxToRem(35),
+    },
+    "@media (max-width:400px)": {
+      fontSize: pxToRem(30),
+    },
   },
   h4: {
-    fontSize: 36,
+    fontSize: pxToRem(36),
+    "@media (max-width:600px)": {
+      fontSize: pxToRem(30),
+    },
+    "@media (max-width:400px)": {
+      fontSize: pxToRem(25),
+    },
   },
   h5: {
-    fontSize: 20,
+    fontSize: pxToRem(20),
+    "@media (max-width:600px)": {
+      fontSize: pxToRem(16),
+    },
+    "@media (max-width:400px)": {
+      fontSize: pxToRem(15),
+    },
   },
   h6: {
-    fontSize: 18,
+    fontSize: pxToRem(18),
+    "@media (max-width:600px)": {
+      fontSize: pxToRem(15),
+    },
+    "@media (max-width:400px)": {
+      fontSize: pxToRem(14),
+    },
   },
   subtitle1: {
-    fontSize: 18,
+    fontSize: pxToRem(18),
+    "@media (max-width:600px)": {
+      fontSize: pxToRem(15),
+    },
+    "@media (max-width:400px)": {
+      fontSize: pxToRem(14),
+    },
   },
   body1: {
-    fontSize: 16,
+    fontSize: pxToRem(16),
+    "@media (max-width:600px)": {
+      fontSize: pxToRem(13),
+    },
+    "@media (max-width:400px)": {
+      fontSize: pxToRem(12),
+    },
   },
   body2: {
-    fontSize: 14,
+    fontSize: pxToRem(14),
+    "@media (max-width:600px)": {
+      fontSize: pxToRem(12),
+    },
+    "@media (max-width:400px)": {
+      fontSize: pxToRem(10),
+    },
   },
 }

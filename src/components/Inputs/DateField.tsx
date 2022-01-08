@@ -22,7 +22,7 @@ export default function DateField({ label, value, onChange, required, inputRef }
         mask='__/__/____'
         value={value}
         onChange={onChange}
-        renderInput={(params) => <TextField {...params} label={label} required={required} size='small' inputRef={inputRef} />}
+        renderInput={(params) => <TextField {...params} label={label} required={required} size='small' />}
         components={{ OpenPickerIcon: KeyboardArrowDownIcon }}
       />
     </LocalizationProvider>

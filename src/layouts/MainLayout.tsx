@@ -1,5 +1,6 @@
 import React from "react"
 import Box, { BoxProps } from "@mui/material/Box"
+import { minWidth } from "../utils"
 
 interface IProps extends BoxProps {}
 export default function MainLayout({ children, sx = [], ...rest }: IProps) {
@@ -7,7 +8,7 @@ export default function MainLayout({ children, sx = [], ...rest }: IProps) {
     <Box
       {...rest}
       sx={[
-        { display: "flex", height: "100vh", width: "100vw", bgcolor: "background.paper", minWidth: "600px", overflow: "auto" },
+        { display: "flex", height: "100vh", width: "100vw", bgcolor: "background.paper", minWidth: `${minWidth}px`, overflow: "auto" },
         ...(Array.isArray(sx) ? sx : [sx]),
       ]}
     >

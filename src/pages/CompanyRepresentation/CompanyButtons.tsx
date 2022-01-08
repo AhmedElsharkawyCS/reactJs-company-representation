@@ -16,7 +16,15 @@ interface IProps {
 
 export default function CompanyButtons({ NoButtonProps, YesButtonProps }: IProps) {
   return (
-    <Box sx={{ display: "flex", mt: "15px" }}>
+    <Box
+      sx={{
+        display: "flex",
+        mt: "15px",
+        "@media (max-width:600px)": {
+          flexDirection: "column",
+        },
+      }}
+    >
       <Button
         key={1}
         variant='contained'
@@ -33,6 +41,11 @@ export default function CompanyButtons({ NoButtonProps, YesButtonProps }: IProps
             color: "common.black",
             typography: "body2",
             "&:hover": { bgcolor: "background.paper" },
+            "@media (max-width:600px)": {
+              flexDirection: "column",
+              marginInlineEnd: "unset",
+              mb: "10px",
+            },
           },
           !!YesButtonProps?.active && { color: "common.white", bgcolor: "#818488", "&:hover": { bgcolor: "#818488" } },
         ]}
