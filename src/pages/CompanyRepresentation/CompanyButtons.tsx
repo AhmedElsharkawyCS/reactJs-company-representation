@@ -2,32 +2,61 @@ import React from "react"
 import Box from "@mui/material/Box"
 import { Button } from "../../components"
 interface IProps {
-  onYesClick?: React.MouseEventHandler<HTMLButtonElement>
-  onNoClick?: React.MouseEventHandler<HTMLButtonElement>
+  YesButtonProps?: {
+    onYesClick?: React.MouseEventHandler<HTMLButtonElement>
+    disable?: boolean
+    active?: boolean
+  }
+  NoButtonProps?: {
+    onNoClick?: React.MouseEventHandler<HTMLButtonElement>
+    disable?: boolean
+    active?: boolean
+  }
 }
-export default function CompanyButtons({ onNoClick, onYesClick }: IProps) {
+
+export default function CompanyButtons({ NoButtonProps, YesButtonProps }: IProps) {
   return (
     <Box sx={{ display: "flex", mt: "15px" }}>
       <Button
-        variant='outlined'
-        // disabled
+        key={1}
+        variant='contained'
+        disabled={YesButtonProps?.disable}
         disableFocusRipple
         disableTouchRipple
-        // disableElevation
-        onClick={onYesClick}
-        sx={{ marginInlineEnd: "50px", minWidth: "150px" }}
+        disableElevation
+        onClick={YesButtonProps?.onYesClick}
+        sx={[
+          {
+            marginInlineEnd: "50px",
+            minWidth: "150px",
+            bgcolor: "background.paper",
+            color: "common.black",
+            typography: "body2",
+            "&:hover": { bgcolor: "background.paper" },
+          },
+          !!YesButtonProps?.active && { color: "common.white", bgcolor: "#818488", "&:hover": { bgcolor: "#818488" } },
+        ]}
       >
         Yes
       </Button>
       <Button
-        variant='outlined'
-        color='primary'
-        // disabled
+        key={2}
+        variant='contained'
+        disabled={NoButtonProps?.disable}
         disableFocusRipple
         disableTouchRipple
-        // disableElevation
-        onClick={onNoClick}
-        sx={{ minWidth: "150px" }}
+        disableElevation
+        onClick={NoButtonProps?.onNoClick}
+        sx={[
+          {
+            minWidth: "150px",
+            bgcolor: "background.paper",
+            color: "common.black",
+            typography: "body2",
+            "&:hover": { bgcolor: "background.paper" },
+          },
+          !!NoButtonProps?.active && { color: "common.white", bgcolor: "#818488", "&:hover": { bgcolor: "#818488" } },
+        ]}
       >
         No
       </Button>

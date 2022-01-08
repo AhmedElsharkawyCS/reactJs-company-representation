@@ -1,6 +1,7 @@
 import React from "react"
 import ArrowRightAltIcon from "@mui/icons-material/ArrowRightAlt"
-import { Container, Text } from "../../components"
+import { Container } from "../Container"
+import { Text } from "../Text"
 
 interface IProps {
   onClick?: React.MouseEventHandler<HTMLSpanElement>

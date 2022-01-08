@@ -10,9 +10,10 @@ interface IProps {
   onChange: (date: any) => void
   label: string
   required?: boolean
+  inputRef?: any
 }
 
-export default function DateField({ label, value, onChange, required }: IProps) {
+export default function DateField({ label, value, onChange, required, inputRef }: IProps) {
   return (
     <LocalizationProvider dateAdapter={DateAdapter}>
       <DatePicker
@@ -21,7 +22,7 @@ export default function DateField({ label, value, onChange, required }: IProps) 
         mask='__/__/____'
         value={value}
         onChange={onChange}
-        renderInput={(params) => <TextField {...params} label={label} required={required} size='small' />}
+        renderInput={(params) => <TextField {...params} label={label} required={required} size='small' inputRef={inputRef} />}
         components={{ OpenPickerIcon: KeyboardArrowDownIcon }}
       />
     </LocalizationProvider>

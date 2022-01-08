@@ -15,7 +15,6 @@ export default function MUIContainer({ children, sx = [], ...rest }: IProps) {
           justifyContent: "center",
           bgcolor: "common.white",
           borderRadius: "4px",
-          boxShadow: 1,
           color: "primary.main",
         },
         ...(Array.isArray(sx) ? sx : [sx]),

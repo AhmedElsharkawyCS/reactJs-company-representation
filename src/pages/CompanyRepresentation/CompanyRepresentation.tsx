@@ -1,29 +1,25 @@
 import React from "react"
 import Box from "@mui/material/Box"
-import ArrowBack from "./ArrowBack"
+import { useNavigate } from "react-router-dom"
 import CompanyTitle from "./CompanyTitle"
 import CompanyQuestion from "./CompanyQuestion"
 import CompanyButtons from "./CompanyButtons"
 import CompanyForm from "./CompanyForm"
-import { Container } from "../../components"
+import { Container, ArrowBack, Button } from "../../components"
 
 export default function CompanyRepresentation() {
   const [step, setStep] = React.useState<number>(1)
-  const [formData, setFormData] = React.useState<any>()
+  const navigate = useNavigate()
   const handleFormSubmit = (data: any) => {
-    alert(JSON.stringify(data))
-  }
-  const handleFormChange = (data: any) => {
-    setFormData(data)
+    // display form data on success
+    alert("SUCCESS!! :-)\n\n" + JSON.stringify(data, null, 4))
+    navigate("/next")
   }
   const handleStep = (number: number) => {
     setStep(number)
   }
   const handleOnBack = () => {
-    if (step > 0 && step <= 3) {
-      setStep(step - 1)
-    }
-    if (step === 2) alert(JSON.stringify(formData))
+    navigate("/blank")
   }
   return (
     <Box sx={{ display: "flex", flexDirection: "column", pt: "30px", pb: "40px", height: "100%" }}>
@@ -32,8 +28,18 @@ export default function CompanyRepresentation() {
         <>
           <CompanyTitle />
           <CompanyQuestion />
-          <CompanyButtons onNoClick={() => handleStep(2)} onYesClick={() => handleStep(3)} />
-          {step === 2 && <CompanyForm onSubmit={handleFormSubmit} handleFormChange={handleFormChange} />}
+          <CompanyButtons
+            NoButtonProps={{ onNoClick: () => handleStep(3), active: step === 3 }}
+            YesButtonProps={{ onYesClick: () => handleStep(2), active: step === 2 }}
+          />
+          {step === 2 && <CompanyForm onSubmit={handleFormSubmit} />}
+          {step === 3 && (
+            <div style={{ display: "flex", flexGrow: 1, alignItems: "flex-end" }}>
+              <Button sx={{ minWidth: "250px" }} size='medium' onClick={() => navigate("/next")} disableElevation disableRipple disableTouchRipple>
+                Continue
+              </Button>
+            </div>
+          )}
         </>
       </Container>
     </Box>

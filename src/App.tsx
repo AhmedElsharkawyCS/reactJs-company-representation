@@ -1,19 +1,26 @@
 import React from "react"
 import { ThemeProvider } from "@mui/material/styles"
 import CssBaseline from "@mui/material/CssBaseline"
+import { BrowserRouter, Routes, Route } from "react-router-dom"
 import theme from "./theme"
 import { MainLayout } from "./layouts"
-import CompanyRepresentation from "./pages/CompanyRepresentation"
+import CompanyRepresentationPage from "./pages/CompanyRepresentation"
+import BlankPage from "./pages/Blank"
+import NextPage from "./pages/Next"
 
-function App() {
+export default function App() {
   return (
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
-      <MainLayout>
-        <CompanyRepresentation />
-      </MainLayout>
-    </ThemeProvider>
+    <BrowserRouter>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <MainLayout>
+          <Routes>
+            <Route path='/' element={<CompanyRepresentationPage />} />
+            <Route path='blank' element={<BlankPage />} />
+            <Route path='next' element={<NextPage />} />
+          </Routes>
+        </MainLayout>
+      </ThemeProvider>
+    </BrowserRouter>
   )
 }
-
-export default App
